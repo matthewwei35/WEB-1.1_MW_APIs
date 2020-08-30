@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+{% block content %}
+
+<section class="weather-form">
+    {# 
+        TODO: Replace the hard-coded city and date below with data from the 
+        server.
+    #}
+    <h1>Weather in San Francisco</h1>
+    <p>on Saturday, August 29, 2020</p>
+
+
+    {#
+        TODO: Add the temperature, description, and min & max temperature below.
+        Replace 'F' with the appropriate units.
+    #}
+    <ul>
+        <li>Description: </li>
+        <li>Temperature: ° F</li>
+        <li>Min: ° F</li>
+        <li>Max: ° F</li>
+    </ul>
+
+
+    {#
+        TODO: Uncomment the following image tag to display a graph of the 
+        temperature over time.
+    #}
+    
+    {# <img src="/graph/{{ lat }}/{{ lon }}/{{ units }}/{{ date.strftime('%Y-%m-%d') }}"> #}
+    
+</section>
+
+{% endblock %}

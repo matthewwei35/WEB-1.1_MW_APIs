@@ -158,7 +158,7 @@ def historical_results():
         'description': '',
         'temp': '',
         'min_temp': get_min_temp(result_hourly),
-        'max_temp': get_min_temp(result_hourly)
+        'max_temp': get_max_temp(result_hourly)
     }
 
     return render_template('historical_results.html', **context)

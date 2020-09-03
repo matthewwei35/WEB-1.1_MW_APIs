@@ -2,11 +2,11 @@ import jinja2
 import matplotlib
 import matplotlib.pyplot as plt
 import os
-import pprint
 import pytz
 import requests
 import sqlite3
 
+from pprint import PrettyPrinter
 from datetime import datetime, timedelta
 from dotenv import load_dotenv
 from flask import Flask, render_template, request, send_file
@@ -36,6 +36,8 @@ my_loader = jinja2.ChoiceLoader([
     jinja2.FileSystemLoader('data'),
 ])
 app.jinja_loader = my_loader
+
+pp = PrettyPrinter(indent=4)
 
 
 ################################################################################
@@ -220,4 +222,4 @@ def graph(lat, lon, units, date):
 
 
 if __name__ == '__main__':
-    app.run()
+    app.run(debug=True)

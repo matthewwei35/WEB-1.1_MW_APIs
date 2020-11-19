@@ -1,18 +1,11 @@
-import jinja2
-import matplotlib
-import matplotlib.pyplot as plt
 import os
-import pytz
 import requests
-import sqlite3
 
 from pprint import PrettyPrinter
 from datetime import datetime, timedelta
 from dotenv import load_dotenv
 from flask import Flask, render_template, request, send_file
 from geopy.geocoders import Nominatim
-from io import BytesIO
-from matplotlib.backends.backend_agg import FigureCanvasAgg as FigureCanvas
 
 
 ################################################################################
@@ -24,18 +17,6 @@ app = Flask(__name__)
 # Get the API key from the '.env' file
 load_dotenv()
 API_KEY = os.getenv('API_KEY')
-
-
-# Settings for image endpoint
-# Written with help from http://dataviztalk.blogspot.com/2016/01/serving-matplotlib-plot-that-follows.html
-matplotlib.use('agg')
-plt.style.use('ggplot')
-
-my_loader = jinja2.ChoiceLoader([
-    app.jinja_loader,
-    jinja2.FileSystemLoader('data'),
-])
-app.jinja_loader = my_loader
 
 pp = PrettyPrinter(indent=4)
 
@@ -164,61 +145,6 @@ def historical_results():
     }
 
     return render_template('historical_results.html', **context)
-
-
-################################################################################
-## IMAGES
-################################################################################
-
-def create_image_file(xAxisData, yAxisData, xLabel, yLabel):
-    """
-    Creates and returns a line graph with the given data.
-    Written with help from http://dataviztalk.blogspot.com/2016/01/serving-matplotlib-plot-that-follows.html
-    """
-    fig, _ = plt.subplots()
-    plt.plot(xAxisData, yAxisData)
-    plt.xlabel(xLabel)
-    plt.ylabel(yLabel)
-    canvas = FigureCanvas(fig)
-    img = BytesIO()
-    fig.savefig(img)
-    img.seek(0)
-    return send_file(img, mimetype='image/png')
-
-@app.route('/graph/<lat>/<lon>/<units>/<date>')
-def graph(lat, lon, units, date):
-    """
-    Returns a line graph with data for the given location & date.
-    @param lat The latitude.
-    @param lon The longitude.
-    @param units The units (imperial, metric, or kelvin)
-    @param date The date, in the format %Y-%m-%d.
-    """
-    date_obj = datetime.strptime(date, '%Y-%m-%d')
-    date_in_seconds = date_obj.strftime('%s')
-
-
-    url = 'http://api.openweathermap.org/data/2.5/onecall/timemachine'
-    params = {
-        'appid': API_KEY,
-        'lat': lat,
-        'lon': lon,
-        'units': units,
-        'dt': date_in_seconds
-    }
-    result_json = requests.get(url, params=params).json()
-
-    hour_results = result_json['hourly']
-
-    hours = range(24)
-    temps = [r['temp'] for r in hour_results]
-    image = create_image_file(
-        hours,
-        temps,
-        'Hour',
-        f'Temperature ({get_letter_for_units(units)})'
-    )
-    return image
 
 
 if __name__ == '__main__':

@@ -39,14 +39,21 @@
     </form>
 </section>
 <section class="weather-form">
-    <form action="historical_results" method="GET">
-        <h2>See Historical Data</h1>
+    <form action="comparison_results" method="GET">
+        <h2>Compare Two Cities</h1>
         <fieldset>
             <legend>Please enter your information:</legend>
 
             <p>
                 <label>
-                    Please enter your city: <br>
+                    Please enter the first city: <br>
+                    <input type="text" name="city">
+                </label>
+            </p>
+
+            <p>
+                <label>
+                    Please enter the second city: <br>
                     <input type="text" name="city">
                 </label>
             </p>
@@ -64,14 +71,6 @@
                 <label>
                     <input type="radio" name="units" value="kelvin">
                     Kelvin
-                </label>
-            </p>
-
-            <p>
-                <label>
-                    Please choose the date you'd like info on: <br>
-                
-                    <input type="date" name="date" min="{{ min_date.strftime('%Y-%m-%d') }}" max="{{ max_date.strftime('%Y-%m-%d') }}">
                 </label>
             </p>
 

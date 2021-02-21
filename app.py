@@ -72,6 +72,7 @@ def results():
         'date': datetime.now().strftime("%A, %B %-d, %Y"),
         'city': result_json['name'],
         'description': result_json['weather'][0]['description'],
+        'main': result_json['weather'][0]['main'],
         'temp': result_json['main']['temp'],
         'humidity': result_json['main']['humidity'],
         'wind_speed': result_json['wind']['speed'],

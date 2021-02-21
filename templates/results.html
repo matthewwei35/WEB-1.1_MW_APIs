@@ -7,6 +7,19 @@
         server 
     #}
     <h1>Weather in {{ city }}</h1>
+    {% if main == 'Clear' %}
+        <img srcset="http://openweathermap.org/img/wn/01d@2x.png" alt="clear sky">
+    {% elif main == 'Clouds' %}
+        <img srcset="http://openweathermap.org/img/wn/03d@2x.png" alt="clouds">
+    {% elif main == 'Rain' %}
+        <img srcset="http://openweathermap.org/img/wn/10d@2x.png" alt="rain">
+    {% elif main == 'Thunderstorm' %}
+        <img srcset="http://openweathermap.org/img/wn/11d@2x.png" alt="thunderstorm">
+    {% elif main == 'Snow' %}
+        <img srcset="http://openweathermap.org/img/wn/13d@2x.png" alt="snow">
+    {% elif main == 'Mist' %}
+        <img srcset="http://openweathermap.org/img/wn/50d@2x.png" alt="mist">
+    {% endif %}
     <p>on {{ date }}</p>
     
     {#

@@ -60,7 +60,7 @@ def results():
     result_json = requests.get(API_URL, params=params).json()
 
     # Uncomment the line below to see the results of the API call!
-    pp.pprint(result_json)
+    # pp.pprint(result_json)
 
     # TODO: Replace the empty variables below with their appropriate values.
     # You'll need to retrieve these from the result_json object above.
@@ -88,20 +88,47 @@ def comparison_results():
     """Displays the relative weather for 2 different cities."""
     # TODO: Use 'request.args' to retrieve the cities & units from the query
     # parameters.
-    city1 = ''
-    city2 = ''
-    units = ''
+    city1 = request.args.get('city1')
+    city2 = request.args.get('city2')
+    units = request.args.get('units')
 
     # TODO: Make 2 API calls, one for each city. HINT: You may want to write a 
     # helper function for this!
+    def request_weather(city):
+        """Returns the weather data for a given city."""
+        params = {
+            'appid': API_KEY,
+            'q': city,
+            'units': units
+        }
+        return requests.get(API_URL, params=params).json()
 
+    city1_json = request_weather(city1)
+    # pp.pprint(city1_json)
+    city2_json = request_weather(city2)
+    # pp.pprint(city2_json)
 
     # TODO: Pass the information for both cities in the context. Make sure to
     # pass info for the temperature, humidity, wind speed, and sunset time!
     # HINT: It may be useful to create 2 new dictionaries, `city1_info` and 
     # `city2_info`, to organize the data.
     context = {
-
+        'date': datetime.now().strftime("%A, %B %-d, %Y"),
+        'units_letter': get_letter_for_units(units),
+        'city1_info': {
+            'city': city1_json['name'],
+            'temp': city1_json['main']['temp'],
+            'humidity': city1_json['main']['humidity'],
+            'wind_speed': city1_json['wind']['speed'],
+            'sunset': datetime.fromtimestamp(city1_json['sys']['sunset']).strftime("%-I:%M %p")
+        },
+        'city2_info': {
+            'city': city2_json['name'],
+            'temp': city2_json['main']['temp'],
+            'humidity': city2_json['main']['humidity'],
+            'wind_speed': city2_json['wind']['speed'],
+            'sunset': datetime.fromtimestamp(city2_json['sys']['sunset']).strftime("%-I:%M %p")
+        }
     }
 
     return render_template('comparison_results.html', **context)
